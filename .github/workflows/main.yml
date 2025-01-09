@@ -3,29 +3,37 @@ name: Build
 on:
   push:
     branches:
-      - main  # Specify the branch you want to trigger the build on (adjust as necessary)
+      - main  # or specify the branch you want to trigger this on
 
 jobs:
   sonarqube:
     name: Run SonarQube analysis
-    runs-on: windows-2022
+    runs-on: windows-latest  # Runs on a Windows hosted runner
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3  # Updated to latest version
-        with:
-          fetch-depth: 0  # Ensures you get the full git history
+        uses: actions/checkout@v3  # Checkout the code from the repository
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3  # Updated to the latest version
+        uses: actions/setup-node@v3  # Set up Node.js (you can specify the version)
         with:
           node-version: '18'
 
       - name: Install dependencies
-        run: npm install
+        run: npm install  # Install project dependencies
 
-      - name: Run SonarQube scan
-        uses: sonarsource/sonarqube-scan-action@v2  # It's better to use a stable release rather than 'master'
+      - name: Install SonarScanner CLI
+        run: |
+          # Download and install SonarScanner CLI for Windows
+          mkdir -p $env:GITHUB_WORKSPACE/sonar-scanner
+          cd $env:GITHUB_WORKSPACE/sonar-scanner
+          Invoke-WebRequest -Uri https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.7.0.2747-windows.zip -OutFile sonar-scanner.zip
+          Expand-Archive -Path sonar-scanner.zip -DestinationPath .
+          $env:PATH += ";$env:GITHUB_WORKSPACE/sonar-scanner/sonar-scanner-4.7.0.2747-windows/bin"  # Add SonarScanner to the system PATH
+
+      - name: Run SonarScanner
+        run: |
+          sonar-scanner.bat -Dsonar.projectKey=my-project-key
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Make sure your token is in GitHub secrets
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}  # Ensure this has the full URL (http:// or https://)
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Make sure to store your token as a secret
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}  # Your SonarQube server URL (can be stored as a secret)
