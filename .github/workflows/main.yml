@@ -8,7 +8,7 @@ on:
 jobs:
   sonarqube:
     name: Run SonarQube analysis
-    runs-on: ubuntu-latest  # Switch to Linux runner for faster execution
+    runs-on: ubuntu-latest  # Change to ubuntu-latest or any other runner as needed
 
     steps:
       - name: Checkout repository
@@ -26,4 +26,4 @@ jobs:
         uses: sonarsource/sonarqube-scan-action@v2
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}  # Make sure this points to the actual URL of your SonarQube server
