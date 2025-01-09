@@ -8,7 +8,7 @@ on:
 jobs:
   sonarqube:
     name: Run SonarQube analysis
-    runs-on: windows-latest  # You can also try windows-2022 if needed
+    runs-on: windows-2022
 
     steps:
       - name: Checkout repository
