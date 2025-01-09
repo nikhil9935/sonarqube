@@ -1,0 +1,40 @@
+name: SonarQube Analysis
+
+on:
+  push:
+    branches:
+      - main  # Or any branch you want to trigger the scan on
+  pull_request:
+    branches:
+      - main  # Or any branch you want to trigger the scan on
+
+jobs:
+  sonarqube:
+    name: Run SonarQube analysis
+    runs-on: ubuntu-latest  # You can change this to `windows-latest` or `macos-latest` if needed
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 11 (or any required version of JDK for your project)
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+
+      - name: Set up Node.js (if your project is a Node.js project)
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'  # Adjust this to your project’s Node.js version
+
+      - name: Install dependencies
+        run: |
+          npm install  # For Node.js projects; replace with your build command for other languages
+
+      - name: Run SonarQube scan
+        uses: sonarsource/sonarcloud-github-action@v1
+        with:
+          organization: 'your-organization'  # If using SonarCloud
+          projectKey: 'your-project-key'
+          projectName: 'your-project-name'
+          sonarToken: ${{ secrets.SONAR_TOKEN }}  # Add your SonarQube token to GitHub Secrets
