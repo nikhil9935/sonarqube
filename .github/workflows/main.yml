@@ -11,7 +11,7 @@ on:
 jobs:
   sonarqube:
     name: Run SonarQube analysis
-    runs-on: ubuntu-latest  # You can change this to `windows-latest` or `macos-latest` if needed
+    runs-on: windows-latest
 
     steps:
       - name: Checkout repository
@@ -25,7 +25,7 @@ jobs:
       - name: Set up Node.js (if your project is a Node.js project)
         uses: actions/setup-node@v3
         with:
-          node-version: '16'  # Adjust this to your project’s Node.js version
+          node-version: '18'  # Adjust this to your project’s Node.js version
 
       - name: Install dependencies
         run: |
@@ -35,6 +35,6 @@ jobs:
         uses: sonarsource/sonarcloud-github-action@v1
         with:
           organization: 'your-organization'  # If using SonarCloud
-          projectKey: 'your-project-key'
-          projectName: 'your-project-name'
+          projectKey: 'dropdown'
+          projectName: 'dropdown'
           sonarToken: ${{ secrets.SONAR_TOKEN }}  # Add your SonarQube token to GitHub Secrets
