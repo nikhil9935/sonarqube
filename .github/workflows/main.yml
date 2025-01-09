@@ -21,6 +21,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: '11'
+          distribution: 'adoptopenjdk' 
 
       - name: Set up Node.js (if your project is a Node.js project)
         uses: actions/setup-node@v3
@@ -34,7 +35,6 @@ jobs:
       - name: Run SonarQube scan
         uses: sonarsource/sonarcloud-github-action@v1
         with:
-          organization: 'your-organization'  # If using SonarCloud
           projectKey: 'dropdown'
           projectName: 'dropdown'
           sonarToken: ${{ secrets.SONAR_TOKEN }}  # Add your SonarQube token to GitHub Secrets
