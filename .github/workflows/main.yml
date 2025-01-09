@@ -1,28 +1,31 @@
 name: Build
 
-on: push
+on:
+  push:
+    branches:
+      - main  # Specify the branch you want to trigger the build on (adjust as necessary)
 
 jobs:
   sonarqube:
     name: Run SonarQube analysis
-    runs-on: windows-latest
+    runs-on: windows-latest  # You can also try windows-2022 if needed
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3  # Updated to latest version
         with:
-          fetchdepth: 0
+          fetch-depth: 0  # Ensures you get the full git history
 
-      - name: Set up node
-        uses: actions/setup-node@v1
+      - name: Set up Node.js
+        uses: actions/setup-node@v3  # Updated to the latest version
         with:
           node-version: '18'
-          
+
       - name: Install dependencies
         run: npm install
 
       - name: Run SonarQube scan
-        uses: sonarsource/sonarqube-scan-action@master
+        uses: sonarsource/sonarqube-scan-action@v2  # It's better to use a stable release rather than 'master'
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Make sure your token is in GitHub secrets
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}  # Ensure this has the full URL (http:// or https://)
